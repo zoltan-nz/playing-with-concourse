@@ -43,3 +43,35 @@ fly --target tutorial set-pipeline --config tasks/basic-pipeline.yml --pipeline 
 fly --target tutorial unpause-pipeline --pipeline hello-world
 fly --target tutorial unpause-job --job hello-world/job-hello-world
 ```
+
+### Git resource
+
+```yaml
+resources:
+  - name: resource-tutorial
+    type: git
+    source:
+      uri: https://github.com/starkandwayne/concourse-tutorial.git
+      branch: develop
+
+jobs:
+  - name: job-hello-world
+    public: true
+    plan:
+      - get: resource-tutorial
+      - task: hello-world
+        file: resource-tutorial/tutorials/basic/task-hello-world/task_hello_world.yml
+```
+
+### Watch
+
+```bash
+fly -t tutorial builds
+fly -t tutorial watch -j hello-world/job-hello-world
+```
+
+Trigger a job and watch:
+
+```
+fly -t tutorial trigger-job -j hello-world/job-hello-world -w
+```
