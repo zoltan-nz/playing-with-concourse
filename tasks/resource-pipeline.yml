@@ -12,4 +12,19 @@ jobs:
     plan:
       - get: resource-tutorial
       - task: hello-world
-        file: resource-tutorial/tutorials/basic/task-hello-world/task_hello_world.yml
+        config:
+          platform: linux
+
+          image_resource:
+            type: docker-image
+            source: { repository: alpine }
+
+          run:
+            path: sh
+            args:
+              - -exc
+              - |
+                whoami
+                env
+                pwd
+                ls -lha
